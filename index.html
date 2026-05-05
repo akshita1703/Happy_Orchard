@@ -1,0 +1,3569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Orchard — Craft Fruit Beer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --crimson: #880203;
+      --crimson-mid: #a81a1a;
+      --crimson-deep: #550102;
+      --crimson-glow: rgba(136, 2, 3, 0.4);
+      --white: #ffffff;
+      --off-white: #fdf8f5;
+      --cream: #f9f2ec;
+      --gold: #c9973b;
+      --gold-light: #e8b86d;
+      --dark: #140101;
+      --dark-mid: #1e0303;
+      --text-dark: #1a0a0a;
+      --muted: #7a5a5a;
+      --card-r: 16px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--off-white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ═══════════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════════ */
+    #cursor {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--crimson);
+      mix-blend-mode: normal;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out);
+    }
+
+    #cursor-ring {
+      position: fixed;
+      z-index: 9998;
+      pointer-events: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--crimson);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s var(--ease-out), height 0.5s var(--ease-out), border-color 0.3s;
+      opacity: 0.55;
+    }
+
+    @media (pointer: coarse) {
+
+      #cursor,
+      #cursor-ring {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+   MOBILE NAV TOGGLE
+═══════════════════════════════════════════════ */
+    #mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--dark);
+      z-index: 490;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    #mobile-nav.open {
+      display: flex;
+    }
+
+    #mobile-nav a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    #mobile-nav a:hover {
+      color: var(--gold);
+    }
+
+    #mobile-nav .mob-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 1.6rem;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.3rem 3.5rem;
+      transition: background 0.5s, box-shadow 0.5s, padding 0.4s;
+    }
+
+    #nav.solid {
+      background: rgba(20, 1, 1, 0.93);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 24px rgba(136, 2, 3, 0.15);
+      padding: 0.9rem 3.5rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--crimson);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      line-height: 1;
+      box-shadow: 0 0 20px rgba(136, 2, 3, 0.5);
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-logo-text .name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-logo-text .sub {
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.25s var(--ease-out);
+      transform-origin: left;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-order {
+      background: var(--crimson) !important;
+      color: var(--white) !important;
+      padding: 0.55rem 1.35rem;
+      border-radius: 100px;
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em !important;
+      text-transform: uppercase !important;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s !important;
+      box-shadow: 0 4px 16px rgba(136, 2, 3, 0.4) !important;
+    }
+
+    .nav-order:hover {
+      background: var(--crimson-mid) !important;
+      transform: scale(1.04) !important;
+      box-shadow: 0 6px 24px rgba(136, 2, 3, 0.55) !important;
+    }
+
+    .nav-order::after {
+      display: none !important;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 1 — HERO
+═══════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 3.5rem;
+      overflow: hidden;
+      background: var(--dark);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 70% at 70% 40%, rgba(136, 2, 3, 0.28) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 10% 90%, rgba(201, 151, 59, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 95% 5%, rgba(136, 2, 3, 0.15) 0%, transparent 55%);
+    }
+
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* Particle dots */
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      animation: particleFade var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes particleFade {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0);
+      }
+
+      30% {
+        opacity: 0.6;
+        transform: translateY(-20px) scale(1);
+      }
+
+      70% {
+        opacity: 0.4;
+        transform: translateY(-60px) scale(0.8);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(0);
+      }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.75rem;
+      opacity: 0;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4.5rem, 10vw, 9rem);
+      font-weight: 700;
+      line-height: 0.93;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      max-width: 760px;
+      opacity: 0;
+      padding: 20px;
+    }
+
+    .hero-h1 .accent {
+      color: var(--crimson);
+      font-style: italic;
+    }
+
+    .hero-h1 .outline {
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.3);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 400px;
+      line-height: 1.8;
+      margin: 2rem 0 2.5rem;
+      opacity: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      flex-wrap: wrap;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--crimson);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 1rem 2.2rem;
+      border-radius: 100px;
+      transition: background 0.2s, transform 0.25s var(--ease-out), box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(136, 2, 3, 0.5);
+    }
+
+    .btn-cta:hover {
+      background: var(--crimson-mid);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 36px rgba(136, 2, 3, 0.6);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 1rem 2rem;
+      border-radius: 100px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Floating product */
+    .hero-product {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(260px, 34vw, 500px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+
+    .hero-product-visual {
+      width: 100%;
+      aspect-ratio: 1/1.4;
+      background: linear-gradient(145deg, rgba(136, 2, 3, 0.2), rgba(201, 151, 59, 0.1));
+      border-radius: 50% 50% 44% 44% / 60% 60% 40% 40%;
+      border: 1px solid rgba(136, 2, 3, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(136, 2, 3, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-product-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201, 151, 59, 0.1) 0%, transparent 60%);
+    }
+
+    /* Rotating ring around product */
+    .hero-product-ring {
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid rgba(136, 2, 3, 0.25);
+      animation: spinRing 20s linear infinite;
+    }
+
+    .hero-product-ring::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      margin-left: -3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    @keyframes spinRing {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hero-badge {
+      position: absolute;
+      background: rgba(20, 1, 1, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(136, 2, 3, 0.3);
+      border-radius: 100px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-badge span {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.04em;
+    }
+
+    .badge-abv {
+      top: 10%;
+      right: -8%;
+    }
+
+    .badge-natural {
+      bottom: 18%;
+      left: -10%;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--crimson);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(136, 2, 3, 0.7), transparent);
+      animation: lineDown 2s ease-in-out infinite;
+    }
+
+    @keyframes lineDown {
+      0% {
+        transform: scaleY(0) translateY(-100%);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scaleY(1) translateY(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scaleY(0) translateY(100%);
+        opacity: 0;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════════ */
+    .marquee-strip {
+      background: var(--crimson);
+      padding: 0.85rem 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeRoll 22s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.9);
+      padding: 0 2.5rem;
+      white-space: nowrap;
+    }
+
+    .marquee-sep {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    @keyframes marqueeRoll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 2 — ABOUT / STORY INTRO (improved)
+═══════════════════════════════════════════════ */
+    #about-intro {
+      background: var(--off-white);
+      padding: 8rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-bg-text {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20vw;
+      font-weight: 700;
+      color: rgba(136, 2, 3, 0.04);
+      letter-spacing: -0.04em;
+      pointer-events: none;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      user-select: none;
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-left {}
+
+    .about-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--crimson);
+    }
+
+    .about-h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-h2 em {
+      font-style: italic;
+      color: var(--crimson);
+    }
+
+    .about-p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      max-width: 480px;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .about-stat {}
+
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--crimson);
+      line-height: 1;
+    }
+
+    .about-stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .about-right {
+      position: relative;
+    }
+
+    .about-visual-stack {
+      position: relative;
+    }
+
+    .about-card-main {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 24px;
+      background: linear-gradient(150deg, var(--crimson-deep) 0%, var(--dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 40px 80px rgba(136, 2, 3, 0.3);
+    }
+
+    .about-card-main::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201, 151, 59, 0.15), transparent);
+    }
+
+    .about-bottle-svg {
+      position: relative;
+      z-index: 2;
+    }
+
+    .about-card-float {
+      position: absolute;
+      bottom: -2rem;
+      right: -2rem;
+      width: 160px;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+      animation: cardFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .float-card-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .float-card-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--crimson);
+    }
+
+    .about-card-float2 {
+      position: absolute;
+      top: 2rem;
+      left: -2rem;
+      width: 140px;
+      background: var(--crimson);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 24px 48px rgba(136, 2, 3, 0.4);
+      animation: cardFloat 5s ease-in-out infinite 1s;
+    }
+
+    .float-card-label2 {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 0.3rem;
+    }
+
+    .float-card-val2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* Decorative ring */
+    .about-ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 28px;
+      border: 1px dashed rgba(136, 2, 3, 0.2);
+      pointer-events: none;
+      animation: ringPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes ringPulse {
+
+      0%,
+      100% {
+        opacity: 0.5;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 3 — STICKY STORY
+═══════════════════════════════════════════════ */
+    #story {
+      position: relative;
+      background: var(--off-white);
+    }
+
+    .story-sticky-wrapper {
+      display: flex;
+      min-height: 400vh;
+    }
+
+    .story-sticky {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      align-items: center;
+    }
+
+    .story-text-col {
+      padding: 0 4rem 0 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .story-steps {
+      position: relative;
+    }
+
+    .story-step {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .story-step.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .story-step-num {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .story-step-num::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--crimson);
+    }
+
+    .story-step h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      margin-bottom: 1.25rem;
+    }
+
+    .story-step h2 em {
+      font-style: italic;
+      color: var(--crimson);
+    }
+
+    .story-step p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 400px;
+      margin-bottom: 1.75rem;
+    }
+
+    .story-step .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--dark);
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+    }
+
+    .story-progress {
+      position: absolute;
+      left: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.12);
+      transition: background 0.4s, transform 0.4s;
+    }
+
+    .progress-dot.active {
+      background: var(--crimson);
+      transform: scale(1.5);
+    }
+
+    .story-visual-col {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark);
+      overflow: hidden;
+    }
+
+    .story-bg-gradient {
+      position: absolute;
+      inset: 0;
+      transition: background 0.8s ease;
+    }
+
+    .story-product-img {
+      position: relative;
+      z-index: 2;
+      width: 460px;
+      text-align: center;
+    }
+
+    .story-bottle {
+      width: 100%;
+      aspect-ratio: 1/2.2;
+      border-radius: 100px 100px 60px 60px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(136, 2, 3, 0.4);
+      transition: background 0.8s ease, transform 0.6s var(--ease-out);
+    }
+
+    .story-bottle::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      width: 18%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), transparent);
+      border-radius: 4px;
+    }
+
+    .step-label-float {
+      position: absolute;
+      z-index: 3;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .step-label-float span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      display: block;
+    }
+
+    .step-label-float strong {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .float-tl {
+      top: 18%;
+      left: 8%;
+    }
+
+    .float-br {
+      bottom: 22%;
+      right: 6%;
+    }
+
+    .story-spacer {
+      height: 400vh;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 4 — OUR CIDERS (new)
+═══════════════════════════════════════════════ */
+    #our-ciders {
+      background: var(--dark);
+      padding: 8rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ciders-bg-ring {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      border: 1px solid rgba(136, 2, 3, 0.15);
+    }
+
+    .ciders-ring-1 {
+      width: 600px;
+      height: 600px;
+      top: -200px;
+      right: -200px;
+    }
+
+    .ciders-ring-2 {
+      width: 400px;
+      height: 400px;
+      bottom: -100px;
+      left: -100px;
+    }
+
+    .ciders-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .sec-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .sec-eyebrow::before,
+    .sec-eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .sec-title em {
+      font-style: italic;
+      color: var(--crimson);
+    }
+
+    .ciders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .cider-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s var(--ease-out), border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .cider-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(136, 2, 3, 0.4);
+      box-shadow: 0 24px 60px rgba(136, 2, 3, 0.2);
+    }
+
+    .cider-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(136, 2, 3, 0.08) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cider-card:hover::before {
+      opacity: 1;
+    }
+
+    .cider-emoji {
+      font-size: 3rem;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .cider-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--crimson);
+      color: var(--white);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 100px;
+    }
+
+    .cider-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+    }
+
+    .cider-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .cider-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding-top: 1.25rem;
+    }
+
+    .cider-abv {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    .cider-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .c-tag {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.5);
+      padding: 0.2rem 0.55rem;
+      border-radius: 100px;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 5 — WHY CHOOSE US (renumbered)
+═══════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════
+   SECTION 5 — WHY CARDS
+═══════════════════════════════════════════════ */
+    #why {
+      background: var(--cream);
+      padding: 7rem 3.5rem;
+    }
+
+    .why-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .why-header .sec-eyebrow {
+      justify-content: flex-start;
+    }
+
+    .why-header .sec-eyebrow::after {
+      display: none;
+    }
+
+    .why-header .sec-eyebrow {
+      color: var(--crimson);
+    }
+
+    .why-header .sec-eyebrow::before {
+      background: var(--crimson);
+    }
+
+    .why-header .sec-title {
+      color: var(--dark);
+      text-align: left;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .why-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2.25rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s var(--ease-out), box-shadow 0.5s, opacity 0.6s;
+      opacity: 0;
+      transform: translateY(30px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .why-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .why-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--crimson);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .why-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .why-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .why-icon {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .why-stat {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+    }
+
+    .why-stat span {
+      color: var(--crimson);
+    }
+
+    .why-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .why-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 7 — VIDEO (enhanced)
+═══════════════════════════════════════════════ */
+    #video-section {
+      position: relative;
+      overflow: hidden;
+      height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--crimson-deep) 0%, var(--dark) 60%, var(--dark-mid) 100%);
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(20, 1, 1, 0.4), rgba(20, 1, 1, 0.8));
+      z-index: 1;
+    }
+
+    /* Enhanced animated orbs */
+    .video-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--crimson);
+      opacity: 0.2;
+      top: -15%;
+      left: -8%;
+      animation: orbDrift 9s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      width: 350px;
+      height: 350px;
+      background: var(--gold);
+      opacity: 0.15;
+      bottom: -15%;
+      right: 5%;
+      animation: orbDrift 11s ease-in-out infinite alternate-reverse;
+    }
+
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      background: var(--crimson-mid);
+      opacity: 0.18;
+      top: 25%;
+      right: 18%;
+      animation: orbDrift 7s ease-in-out infinite alternate;
+    }
+
+    .orb-4 {
+      width: 180px;
+      height: 180px;
+      background: var(--gold-light);
+      opacity: 0.1;
+      top: 60%;
+      left: 25%;
+      animation: orbDrift 13s ease-in-out infinite;
+    }
+
+    @keyframes orbDrift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(40px, 30px) scale(1.15);
+      }
+    }
+
+    /* Floating particles in video */
+    .video-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      animation: vParticle var(--vdur) ease-in-out infinite;
+      animation-delay: var(--vdelay);
+    }
+
+    @keyframes vParticle {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: translateY(-20px) scale(1);
+        opacity: 0.7;
+      }
+    }
+
+    /* Rotating frame */
+    .video-frame-ring {
+      position: absolute;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: 50%;
+      border: 1px solid rgba(136, 2, 3, 0.25);
+      animation: frameSpin var(--fspin) linear infinite;
+    }
+
+    @keyframes frameSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .frame-ring-1 {
+      width: 500px;
+      height: 500px;
+    }
+
+    .frame-ring-2 {
+      width: 650px;
+      height: 650px;
+      animation-direction: reverse;
+    }
+
+    /* Video floating label pills */
+    .video-deco {
+      position: absolute;
+      z-index: 4;
+      pointer-events: none;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(136, 2, 3, 0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(136, 2, 3, 0.5);
+      border-radius: 100px;
+      padding: 0.5rem 1.1rem;
+      animation: floatDeco 5s ease-in-out infinite;
+    }
+
+    .deco-1 {
+      top: 16%;
+      left: 7%;
+      animation-delay: 0s;
+    }
+
+    .deco-2 {
+      top: 22%;
+      right: 6%;
+      animation-delay: 1.5s;
+    }
+
+    .deco-3 {
+      bottom: 18%;
+      left: 11%;
+      animation-delay: 0.8s;
+    }
+
+    .deco-4 {
+      bottom: 24%;
+      right: 10%;
+      animation-delay: 2.2s;
+    }
+
+    @keyframes floatDeco {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .video-play-wrap {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .play-ring {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+      background: rgba(136, 2, 3, 0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .play-ring::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid rgba(136, 2, 3, 0.5);
+      animation: pingPulse 2.5s ease-out infinite;
+    }
+
+    .play-ring::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid rgba(201, 151, 59, 0.3);
+      animation: pingPulse 2.5s ease-out infinite 0.8s;
+    }
+
+    @keyframes pingPulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
+    }
+
+    .play-ring:hover {
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .play-icon {
+      font-size: 1.6rem;
+      color: var(--white);
+      margin-left: 5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .video-content {
+      position: absolute;
+      z-index: 3;
+      text-align: center;
+      max-width: 680px;
+      padding: 0 2rem;
+    }
+
+    .video-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .video-content h2 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .video-content p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 300;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .video-btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 8 — VISIT OUR ORCHARD (new)
+═══════════════════════════════════════════════ */
+    #visit-orchard {
+      background: var(--off-white);
+      padding: 8rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visit-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .visit-header .sec-eyebrow {
+      color: var(--crimson);
+    }
+
+    .visit-header .sec-eyebrow::before,
+    .visit-header .sec-eyebrow::after {
+      background: var(--crimson);
+    }
+
+    .visit-header .sec-title {
+      color: var(--dark);
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .visit-feature-card {
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      background: var(--dark);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: flex-end;
+      transition: transform 0.4s var(--ease-out);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .visit-feature-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .visit-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s var(--ease-out);
+    }
+
+    .visit-feature-card:hover .visit-card-bg {
+      transform: scale(1.04);
+    }
+
+    .visit-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20, 1, 1, 0.92) 0%, rgba(20, 1, 1, 0.3) 60%, transparent 100%);
+    }
+
+    .visit-card-body {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      width: 100%;
+    }
+
+    .visit-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .visit-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .visit-card-desc {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .visit-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .visit-card-link:hover {
+      gap: 0.7rem;
+    }
+
+    .visit-small-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .visit-small-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(136, 2, 3, 0.1);
+      transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.3s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .visit-small-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(136, 2, 3, 0.1);
+      border-color: rgba(136, 2, 3, 0.3);
+    }
+
+    .visit-small-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .visit-small-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .visit-small-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 9 — LOCATION (new)
+═══════════════════════════════════════════════ */
+    #location {
+      background: var(--dark);
+      padding: 8rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .location-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .location-left {}
+
+    .location-left .sec-eyebrow {
+      justify-content: flex-start;
+    }
+
+    .location-left .sec-eyebrow::after {
+      display: none;
+    }
+
+    .location-left .sec-title {
+      color: var(--white);
+      text-align: left;
+    }
+
+    .location-address {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+    }
+
+    .loc-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .loc-row:last-child {
+      border-bottom: none;
+    }
+
+    .loc-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .loc-info {}
+
+    .loc-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .loc-val {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .location-cta-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(201, 151, 59, 0.4);
+      padding: 0.9rem 1.75rem;
+      border-radius: 100px;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .btn-outline-gold:hover {
+      border-color: var(--gold);
+      background: rgba(201, 151, 59, 0.1);
+      color: var(--gold-light);
+    }
+
+    .location-map {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+      background: var(--dark-mid);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .map-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, #1a0505 0%, #0d0101 100%);
+    }
+
+    /* Decorative map grid */
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(136, 2, 3, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(136, 2, 3, 0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .map-pin {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: pinBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes pinBounce {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%);
+      }
+
+      50% {
+        transform: translate(-50%, calc(-50% - 8px));
+      }
+    }
+
+    .map-pin-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50% 50% 50% 0;
+      background: var(--crimson);
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 30px rgba(136, 2, 3, 0.6);
+    }
+
+    .map-pin-icon::after {
+      content: '🍺';
+      font-size: 1.3rem;
+      transform: rotate(45deg);
+      display: block;
+    }
+
+    .map-pin-shadow {
+      width: 20px;
+      height: 6px;
+      background: rgba(136, 2, 3, 0.3);
+      border-radius: 50%;
+      margin-top: 4px;
+      filter: blur(2px);
+    }
+
+    .map-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid rgba(136, 2, 3, 0.4);
+      animation: mapPulse 2.5s ease-out infinite;
+    }
+
+    .map-pulse:nth-child(2) {
+      animation-delay: 0.8s;
+    }
+
+    .map-pulse:nth-child(3) {
+      animation-delay: 1.6s;
+    }
+
+    @keyframes mapPulse {
+      0% {
+        width: 60px;
+        height: 60px;
+        opacity: 0.8;
+        margin-top: -30px;
+        margin-left: -30px;
+      }
+
+      100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+        margin-top: -100px;
+        margin-left: -100px;
+      }
+    }
+
+    .map-label {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.9rem 1.5rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .map-label-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .map-label-sub {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 10 — NEWSLETTER (new)
+═══════════════════════════════════════════════ */
+    #newsletter {
+      background: var(--crimson);
+      padding: 7rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .newsletter-bg {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20vw;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.08);
+      letter-spacing: -0.04em;
+      pointer-events: none;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      user-select: none;
+    }
+
+    .newsletter-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .nl-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      animation: nlParticle var(--nlDur) ease-in-out infinite;
+      animation-delay: var(--nlDelay);
+    }
+
+    @keyframes nlParticle {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: translateY(-30px) rotate(180deg);
+        opacity: 0.7;
+      }
+    }
+
+    .newsletter-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .newsletter-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-h2 em {
+      font-style: italic;
+    }
+
+    .newsletter-p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 1rem 1.4rem;
+      border-radius: 100px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .newsletter-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .newsletter-input:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .newsletter-btn {
+      background: var(--white);
+      color: var(--crimson);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 1rem 1.75rem;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover {
+      background: var(--off-white);
+      transform: scale(1.03);
+    }
+
+    .newsletter-note {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 1rem;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SECTION 11 — FINAL CTA (same quality as before)
+═══════════════════════════════════════════════ */
+    #cta-final {
+      background: var(--off-white);
+      padding: 8rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg-text {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22vw;
+      font-weight: 700;
+      color: rgba(136, 2, 3, 0.04);
+      letter-spacing: -0.04em;
+      pointer-events: none;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      user-select: none;
+    }
+
+    /* Animated shapes in CTA */
+    .cta-shape {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+    }
+
+    .cta-shape-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--crimson);
+      top: -100px;
+      left: -100px;
+      animation: ctaShape 8s ease-in-out infinite alternate;
+    }
+
+    .cta-shape-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--gold);
+      bottom: -80px;
+      right: -80px;
+      animation: ctaShape 10s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes ctaShape {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(30px, 20px) scale(1.2);
+      }
+    }
+
+    .cta-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 1.25rem;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title em {
+      font-style: italic;
+      color: var(--crimson);
+    }
+
+    .cta-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 420px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-cta-crimson {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--crimson);
+      color: var(--white);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 1.2rem 3rem;
+      border-radius: 100px;
+      transition: background 0.2s, transform 0.25s var(--ease-out), box-shadow 0.2s;
+      box-shadow: 0 8px 36px rgba(136, 2, 3, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-cta-crimson:hover {
+      background: var(--crimson-mid);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 56px rgba(136, 2, 3, 0.5);
+    }
+
+    .cta-note {
+      font-size: 0.72rem;
+      color: rgba(26, 10, 10, 0.35);
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Awards strip */
+    .cta-awards {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3.5rem;
+      position: relative;
+      z-index: 1;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .award-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      border: 1px solid rgba(136, 2, 3, 0.15);
+      background: var(--white);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .award-badge:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(136, 2, 3, 0.12);
+    }
+
+    .award-emoji {
+      font-size: 1.5rem;
+    }
+
+    .award-text {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--crimson);
+    }
+
+    .award-year {
+      font-size: 0.6rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+    footer {
+      background: var(--dark);
+      padding: 4rem 3.5rem 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--crimson);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-brand span {
+      color: var(--gold);
+    }
+
+    .footer-tagline {
+      font-size: 0.83rem;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .soc {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .soc:hover {
+      border-color: var(--crimson);
+      color: var(--white);
+      background: rgba(136, 2, 3, 0.2);
+    }
+
+    .footer-col h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-col a {
+      font-size: 0.83rem;
+      color: rgba(255, 255, 255, 0.3);
+      text-decoration: none;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.18);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-bottom a {
+      color: rgba(201, 151, 59, 0.4);
+      text-decoration: none;
+    }
+
+    /* ═══════════════════════════════════════════════
+   SCROLL REVEAL UTILITY
+═══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-d1 {
+      transition-delay: 0.1s;
+    }
+
+    .reveal-d2 {
+      transition-delay: 0.2s;
+    }
+
+    .reveal-d3 {
+      transition-delay: 0.3s;
+    }
+
+    .reveal-d4 {
+      transition-delay: 0.4s;
+    }
+
+    /* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .ciders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .visit-small-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .location-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .location-map {
+        aspect-ratio: 16/9;
+      }
+    }
+
+    @media (max-width: 960px) {
+      #nav {
+        padding: 1.1rem 1.5rem;
+      }
+
+      #nav.solid {
+        padding: 0.8rem 1.5rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      #hero {
+        padding: 0 1.5rem;
+      }
+
+      .hero-product {
+        display: none;
+      }
+
+      .hero-h1 {
+        font-size: clamp(3rem, 12vw, 5rem);
+      }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+      }
+
+      .about-card-float,
+      .about-card-float2 {
+        display: none;
+      }
+
+      .story-sticky {
+        grid-template-columns: 1fr;
+      }
+
+      .story-visual-col {
+        display: none;
+      }
+
+      .story-text-col {
+        padding: 0 1.5rem;
+      }
+
+      #about-intro,
+      #our-ciders,
+      #visit-orchard,
+      #location,
+      #newsletter,
+      #cta-final {
+        padding: 5rem 1.5rem;
+      }
+
+      #why {
+        padding: 5rem 1.5rem;
+      }
+
+      footer {
+        padding: 3rem 1.5rem 1.5rem;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .visit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        gap: 1.5rem;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .ciders-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .visit-small-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cta-awards {
+        gap: 1rem;
+      }
+
+      .location-cta-btns {
+        flex-direction: column;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+   CUSTOM CLASSES — replaces all inline styles
+   Easy to edit: change values here to update site
+═══════════════════════════════════════════════ */
+
+    /* Mobile nav Order Now link */
+    .mob-order {
+      color: var(--crimson) !important;
+    }
+
+    /* Nav logo image */
+    .nav-logo-img {
+      height: 64px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+    }
+
+    /* Hero product can/bottle image */
+    .hero-product-img {
+      width: 80%;
+      max-width: 540px;
+      height: auto;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 8px 32px rgba(136, 2, 3, 0.5));
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Gold variant of badge dot */
+    .badge-dot--gold {
+      background: var(--gold);
+    }
+
+    /* Story steps wrapper */
+    .story-steps {
+      position: relative;
+      min-height: 340px;
+    }
+
+    /* Story bottle initial gradient (JS overrides dynamically) */
+    #story-bg {
+      background: linear-gradient(135deg, #1a0505, #0d0101);
+    }
+
+    #story-bottle {
+      background: linear-gradient(160deg, #880203, #1a0101);
+    }
+
+    /* Story bottle logo image */
+    .story-bottle-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 20px;
+      display: block;
+    }
+
+    /* Why cards staggered animation delays */
+    .why-delay-0 { transition-delay: 0s; }
+    .why-delay-1 { transition-delay: 0.1s; }
+    .why-delay-2 { transition-delay: 0.2s; }
+    .why-delay-3 { transition-delay: 0.3s; }
+
+    /* Video frame rings spin speed */
+    .frame-ring-1 { --fspin: 30s; }
+    .frame-ring-2 { --fspin: 45s; }
+
+    /* Video floating particles */
+    .vp { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; }
+    .vp { animation: vParticle var(--vdur) ease-in-out infinite; animation-delay: var(--vdelay); }
+    .vp-1 { width: 6px;  height: 6px;  background: rgba(201, 151, 59, 0.6); top: 20%; left: 15%; --vdur: 4s;   --vdelay: 0s; }
+    .vp-2 { width: 4px;  height: 4px;  background: rgba(136, 2,   3, 0.7);  top: 60%; left: 75%; --vdur: 5s;   --vdelay: 1s; }
+    .vp-3 { width: 8px;  height: 8px;  background: rgba(201, 151, 59, 0.4); top: 35%; left: 85%; --vdur: 3.5s; --vdelay: 0.5s; }
+    .vp-4 { width: 5px;  height: 5px;  background: rgba(255, 255, 255, 0.4); top: 75%; left: 20%; --vdur: 6s;  --vdelay: 2s; }
+    .vp-5 { width: 3px;  height: 3px;  background: rgba(136, 2,   3, 0.9);  top: 45%; left: 40%; --vdur: 4.5s; --vdelay: 1.5s; }
+
+    /* Visit card background gradients */
+    .visit-card-bg--taproom  { background: linear-gradient(135deg, #880203, #1a0101); }
+    .visit-card-bg--workshop { background: linear-gradient(135deg, #3a0101, #880203 60%, #5a0202); }
+
+    /* Location section eyebrow + title colour overrides */
+    .sec-eyebrow--gold  { color: var(--gold); }
+    .sec-title--white   { color: var(--white); }
+
+    /* Footer logo image */
+    .footer-logo-img {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- MOBILE NAV -->
+  <div id="mobile-nav">
+    <button class="mob-close" id="mob-close" aria-label="Close menu">✕</button>
+    <a href="#about-intro" onclick="closeMobileNav()">Our Story</a>
+    <a href="#our-ciders" onclick="closeMobileNav()">Our Ciders</a>
+    <a href="#visit-orchard" onclick="closeMobileNav()">Visit Orchard</a>
+    <a href="#newsletter" onclick="closeMobileNav()">Newsletter</a>
+    <a href="#location" onclick="closeMobileNav()">Find Us</a>
+    <a href="#cta-final" onclick="closeMobileNav()" class="mob-order">Order Now →</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <img src="img/logo2.png" alt="Himalayan Happy Orchard"
+        class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about-intro">Our Story</a></li>
+      <li><a href="#our-ciders">Our Ciders</a></li>
+      <li><a href="#visit-orchard">Visit Orchard</a></li>
+      <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="#location">Find Us</a></li>
+      <li><a href="#cta-final" class="nav-order">Order Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grain"></div>
+
+    <!-- Particles -->
+    <div class="hero-particles" id="hero-particles"></div>
+
+    <!-- <div class="hero-eyebrow" id="hero-eyebrow">Craft Fruit Beer · Est. 2018</div> -->
+
+    <h1 class="hero-h1" id="hero-h1">
+      <!-- <span class="outline">Born in the</span><br> -->
+      <span class="accent">Crafted in  </span><br>
+      the Mountains.<br>
+      <!-- <span  class="outline" >Built for the World.</span> -->
+    </h1>
+
+    
+
+    <div class="hero-actions" id="hero-actions">
+      <a href="#our-ciders" class="btn-cta">Explore Our Ciders</a>
+      <!-- <a href="#about-intro" class="btn-ghost">Our Story ↓</a> -->
+    </div>
+
+    <!-- Floating product visual -->
+    <div class="hero-product" id="hero-product">
+      <div class="hero-product-ring"></div>
+      <div class="hero-product-visual">
+        <img src="img/Happy Orchard Vertical (1).png" alt="Himalayan Happy Orchard"
+          class="hero-product-img">
+      </div>
+      <div class="hero-badge badge-abv">
+        <div class="badge-dot"></div>
+        <span>4.8% ABV</span>
+      </div>
+      <div class="hero-badge badge-natural">
+        <div class="badge-dot badge-dot--gold"></div>
+        <span>100% Real Fruit</span>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint" id="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ── -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="marquee-sep"></span>100% Real Orchard Fruit</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Small Batch Brewed</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>No Artificial Flavours</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Award Winning</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Farm to Pint</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Sustainably Grown</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Zero Preservatives</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Handcrafted Weekly</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>100% Real Orchard Fruit</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Small Batch Brewed</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>No Artificial Flavours</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Award Winning</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Farm to Pint</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Sustainably Grown</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Zero Preservatives</span>
+      <span class="marquee-item"><span class="marquee-sep"></span>Handcrafted Weekly</span>
+    </div>
+  </div>
+
+
+  <!-- ── STICKY STORY ── -->
+  <section id="story">
+    <div class="story-sticky-wrapper">
+      <div class="story-sticky" id="story-sticky">
+        <div class="story-progress" id="story-progress">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+        <div class="story-text-col">
+          <div class="story-steps" id="story-steps">
+            <div class="story-step active" data-step="0">
+              <div class="story-step-num">01 / Origin</div>
+              <h2>Started with one <em>apple tree.</em></h2>
+              <p>Happy Orchard began in 2018 on a 12-acre plot in the Western Ghats. A single apple tree, a homebrew
+                kit, and an obsession with flavour — that's all it took to start a revolution in craft brewing.</p>
+              <div class="pill-tag">🌱 12 Acres · Est. 2018</div>
+            </div>
+            <div class="story-step" data-step="1">
+              <div class="story-step-num">02 / Fruit</div>
+              <h2>Over 40 varieties, <em>zero shortcuts.</em></h2>
+              <p>We grow Bramley apples, Morello cherries, Williams pears, and rare citrus hybrids. Every fruit is
+                hand-picked at peak ripeness. No concentrates. No flavour syrups. Never.</p>
+              <div class="pill-tag">🍎 40+ Fruit Varieties</div>
+            </div>
+            <div class="story-step" data-step="2">
+              <div class="story-step-num">03 / Process</div>
+              <h2>Brewed slow. <em>Fermented wild.</em></h2>
+              <p>Each batch ferments for a minimum of 21 days in open-top copper vessels. We use wild ambient yeast
+                captured from our own orchard. The result is something truly alive — complex, layered, alive.</p>
+              <div class="pill-tag">⏱ 21-Day Fermentation</div>
+            </div>
+            <div class="story-step" data-step="3">
+              <div class="story-step-num">04 / Result</div>
+              <h2>A beer that <em>tastes like somewhere.</em></h2>
+              <p>Every can of Happy Orchard carries the character of its land — the morning mist, the clay soil, the
+                wildflowers. Terroir in a can. Crack one open and taste exactly where it came from.</p>
+              <div class="pill-tag">🏆 3× Award Winning</div>
+            </div>
+          </div>
+        </div>
+        <div class="story-visual-col" id="story-visual">
+          <div class="story-bg-gradient" id="story-bg">
+          </div>
+          <div class="story-product-img" id="story-bottle-wrap">
+            <div class="story-bottle" id="story-bottle">
+              <img src="img/Happy Orchard Vertical (1).png"
+                alt="Himalayan Happy Orchard"
+                class="story-bottle-img">
+            </div>
+          </div>
+          <div class="step-label-float float-tl" id="label-tl">
+            <span>Origin</span>
+            <strong>Western Ghats</strong>
+          </div>
+          <div class="step-label-float float-br" id="label-br">
+            <span>ABV</span>
+            <strong>4.8%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OUR CIDERS (new section) ── -->
+  <section id="our-ciders">
+    <div class="ciders-bg-ring ciders-ring-1"></div>
+    <div class="ciders-bg-ring ciders-ring-2"></div>
+    <div class="ciders-header reveal">
+      <div class="sec-eyebrow">Signature Collection</div>
+      <h2 class="sec-title">Our <em>Ciders</em></h2>
+    </div>
+    <div class="ciders-grid">
+      <div class="cider-card reveal reveal-d1">
+        <span class="cider-emoji">🍎</span>
+        <div class="cider-badge">Bestseller</div>
+        <div class="cider-name">Original Apple Reserve</div>
+        <div class="cider-desc">Our flagship. Bramley apples fermented with wild orchard yeast for 21 days. Clean,
+          crisp, and endlessly complex with notes of baked apple and stone fruit.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">4.8% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Dry</span><span class="c-tag">Classic</span></div>
+        </div>
+      </div>
+      <div class="cider-card reveal reveal-d2">
+        <span class="cider-emoji">🍒</span>
+        <div class="cider-badge">Limited</div>
+        <div class="cider-name">Morello Cherry Sour</div>
+        <div class="cider-desc">Wild-fermented Morello cherries with a tart, vibrant finish. Our most adventurous
+          expression — sour, fruity, and wholly unapologetic.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">5.2% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Sour</span><span class="c-tag">Wild</span></div>
+        </div>
+      </div>
+      <div class="cider-card reveal reveal-d3">
+        <span class="cider-emoji">🍐</span>
+        <div class="cider-name">Williams Pear Blanc</div>
+        <div class="cider-desc">Delicate and aromatic. Williams pears pressed fresh from our orchard, slowly fermented
+          to retain floral notes and a whisper of sweetness.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">4.4% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Floral</span><span class="c-tag">Off-dry</span></div>
+        </div>
+      </div>
+      <div class="cider-card reveal reveal-d1">
+        <span class="cider-emoji">🍋</span>
+        <div class="cider-badge">New</div>
+        <div class="cider-name">Citrus Hybrid Brut</div>
+        <div class="cider-desc">Rare citrus hybrids from our experimental grove. Bone dry, effervescent, and razor-sharp
+          — like sunlight in a glass.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">5.5% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Brut</span><span class="c-tag">Crisp</span></div>
+        </div>
+      </div>
+      <div class="cider-card reveal reveal-d2">
+        <span class="cider-emoji">🫚</span>
+        <div class="cider-name">Barrel-Aged Reserve</div>
+        <div class="cider-desc">Aged for 6 months in ex-whisky barrels. Deep, warming, and layered with vanilla, oak,
+          and concentrated apple. Our most complex cider.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">7.2% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Oak</span><span class="c-tag">Rich</span></div>
+        </div>
+      </div>
+      <div class="cider-card reveal reveal-d3">
+        <span class="cider-emoji">🌸</span>
+        <div class="cider-name">Elderflower Blush</div>
+        <div class="cider-desc">Apple cider co-fermented with hand-picked elderflowers. Soft, aromatic, and gently pink.
+          The perfect introduction to the Happy Orchard story.</div>
+        <div class="cider-footer">
+          <span class="cider-abv">3.8% ABV</span>
+          <div class="cider-tags"><span class="c-tag">Soft</span><span class="c-tag">Easy</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHY CHOOSE US ── -->
+  <section id="why">
+    <div class="why-header reveal">
+      <div class="sec-eyebrow">Why Happy Orchard</div>
+      <h2 class="sec-title">The numbers <em>speak.</em></h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card why-delay-0">
+        <div class="why-icon">🌿</div>
+        <div class="why-stat">100<span>%</span></div>
+        <div class="why-label">Real Fruit</div>
+        <div class="why-desc">Every batch uses only whole, hand-picked orchard fruit. No concentrates, extracts, or
+          syrups — ever.</div>
+      </div>
+      <div class="why-card why-delay-1">
+        <div class="why-icon">🏆</div>
+        <div class="why-stat">3<span>×</span></div>
+        <div class="why-label">Award Winning</div>
+        <div class="why-desc">Best Craft Fruit Beer at the India Beer Cup — three years running. Judged by peers, loved
+          by drinkers.</div>
+      </div>
+      <div class="why-card why-delay-2">
+        <div class="why-icon">⏱</div>
+        <div class="why-stat">21<span>d</span></div>
+        <div class="why-label">Fermentation</div>
+        <div class="why-desc">We never rush the process. Each brew ferments for a minimum of 21 days for depth,
+          complexity, and character.</div>
+      </div>
+      <div class="why-card why-delay-3">
+        <div class="why-icon">♻️</div>
+        <div class="why-stat">0</div>
+        <div class="why-label">Preservatives</div>
+        <div class="why-desc">Clean label, clean conscience. Nothing in our beers that isn't grain, fruit, hops, yeast,
+          or water.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VIDEO SECTION (enhanced) ── -->
+  <section id="video-section">
+    <div class="video-bg"></div>
+    <div class="video-orb orb-1"></div>
+    <div class="video-orb orb-2"></div>
+    <div class="video-orb orb-3"></div>
+    <div class="video-orb orb-4"></div>
+    <div class="video-overlay"></div>
+    <!-- Rotating frame rings -->
+    <div class="video-frame-ring frame-ring-1"></div>
+    <div class="video-frame-ring frame-ring-2"></div>
+    <!-- Video floating particles -->
+    <div class="video-particle"
+      class="vp vp-1"></div>
+    <div class="video-particle"
+      class="vp vp-2"></div>
+    <div class="video-particle"
+      class="vp vp-3"></div>
+    <div class="video-particle"
+      class="vp vp-4"></div>
+    <div class="video-particle"
+      class="vp vp-5"></div>
+
+    <div class="video-deco deco-1">Farm to Pint</div>
+    <div class="video-deco deco-2">Brewed Weekly</div>
+    <div class="video-deco deco-3">Western Ghats</div>
+    <div class="video-deco deco-4">Wild Yeast</div>
+
+    <div class="video-content reveal">
+      <h2>Where every<br><em>sip</em> begins.</h2>
+      <p>12 acres of orchard. 40 fruit varieties. One obsession. Come see where Happy Orchard happens — and taste it
+        straight from the source.</p>
+      <div class="video-btn-group">
+        <a href="#visit-orchard" class="btn-cta">Plan Your Visit</a>
+        <a href="#about-intro" class="btn-ghost">Watch Our Story</a>
+      </div>
+      <div class="video-play-wrap">
+        <div class="play-ring" onclick="alert('Replace with real video player')">
+          <span class="play-icon">▶</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VISIT OUR ORCHARD (new) ── -->
+  <!-- <section id="visit-orchard">
+    <div class="visit-header reveal">
+      <div class="sec-eyebrow">Come Find Us</div>
+      <h2 class="sec-title">Visit Our <em>Orchard</em></h2>
+    </div>
+    <div class="visit-grid reveal">
+      <div class="visit-feature-card">
+        <div class="visit-card-bg visit-card-bg--taproom"></div>
+        <div class="visit-card-overlay"></div>
+        <div class="visit-card-body">
+          <span class="visit-card-icon">🍺</span>
+          <div class="visit-card-title">Taproom Experience</div>
+          <div class="visit-card-desc">Sit in the heart of our orchard and taste our full range fresh from the tap.
+            Weekend sessions with live music and orchard-to-table food.</div>
+          <a href="#location" class="visit-card-link">Book a Table →</a>
+        </div>
+      </div>
+      <div class="visit-feature-card">
+        <div class="visit-card-bg visit-card-bg--workshop"></div>
+        <div class="visit-card-overlay"></div>
+        <div class="visit-card-body">
+          <span class="visit-card-icon">🔬</span>
+          <div class="visit-card-title">Brewing Workshop</div>
+          <div class="visit-card-desc">Walk the orchard, pick your fruit, and brew your own small batch under the
+            guidance of our head brewer. Take home what you make.</div>
+          <a href="#location" class="visit-card-link">Join a Workshop →</a>
+        </div>
+      </div>
+    </div>
+    <div class="visit-small-grid">
+      <div class="visit-small-card reveal reveal-d1">
+        <div class="visit-small-icon">🚶</div>
+        <div class="visit-small-title">Orchard Tours</div>
+        <div class="visit-small-desc">Guided walks through our 12-acre fruit orchard with expert commentary on craft
+          brewing.</div>
+      </div>
+      <div class="visit-small-card reveal reveal-d2">
+        <div class="visit-small-icon">🎉</div>
+        <div class="visit-small-title">Private Events</div>
+        <div class="visit-small-desc">Hire our orchard for corporate events, weddings, and celebrations. Bespoke
+          catering available.</div>
+      </div>
+      <div class="visit-small-card reveal reveal-d3">
+        <div class="visit-small-icon">📦</div>
+        <div class="visit-small-title">Direct Purchase</div>
+        <div class="visit-small-desc">Buy our full range, limited editions, and brewery exclusives directly from our
+          cellar door.</div>
+      </div>
+      <div class="visit-small-card reveal reveal-d4">
+        <div class="visit-small-icon">🌅</div>
+        <div class="visit-small-title">Seasonal Harvest</div>
+        <div class="visit-small-desc">Join us during harvest season to pick fruit and witness the magic of cider-making
+          first-hand.</div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ── LOCATION (new) ── -->
+  <!-- <section id="location">
+    <div class="location-inner">
+      <div class="location-left reveal">
+        <div class="sec-eyebrow sec-eyebrow--gold">Find Us</div>
+        <h2 class="sec-title sec-title--white">Come taste it<br><em>at the source.</em></h2>
+        <div class="location-address">
+          <div class="loc-row">
+            <div class="loc-icon">📍</div>
+            <div class="loc-info">
+              <div class="loc-label">Address</div>
+              <div class="loc-val">Happy Orchard Brewing Co.<br>Plot 12, Orchard Road<br>Western Ghats, Maharashtra —
+                415 001</div>
+            </div>
+          </div>
+          <div class="loc-row">
+            <div class="loc-icon">🕐</div>
+            <div class="loc-info">
+              <div class="loc-label">Taproom Hours</div>
+              <div class="loc-val">Thu–Fri: 4pm–10pm<br>Sat–Sun: 12pm–10pm</div>
+            </div>
+          </div>
+          <div class="loc-row">
+            <div class="loc-icon">📞</div>
+            <div class="loc-info">
+              <div class="loc-label">Reservations</div>
+              <div class="loc-val">+91 98765 43210<br>hello@happyorchard.in</div>
+            </div>
+          </div>
+          <div class="loc-row">
+            <div class="loc-icon">🚗</div>
+            <div class="loc-info">
+              <div class="loc-label">Getting Here</div>
+              <div class="loc-val">45 mins from Pune. Free parking on site. Nearest station: Satara.</div>
+            </div>
+          </div>
+        </div>
+        <div class="location-cta-btns">
+          <a href="#" class="btn-cta">Get Directions</a>
+          <a href="#" class="btn-outline-gold">Book a Tour</a>
+        </div>
+      </div>
+      <div class="location-right reveal reveal-d2">
+        <div class="location-map">
+          <div class="map-bg"></div>
+          <div class="map-grid"></div>
+          <div class="map-pulse"></div>
+          <div class="map-pulse"></div>
+          <div class="map-pulse"></div>
+          <div class="map-pin">
+            <div class="map-pin-icon"></div>
+            <div class="map-pin-shadow"></div>
+          </div>
+          <div class="map-label">
+            <div class="map-label-title">Happy Orchard</div>
+            <div class="map-label-sub">Western Ghats, Maharashtra</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ── NEWSLETTER (new) ── -->
+  <section id="newsletter">
+    <div class="newsletter-bg">BREW</div>
+    <div class="newsletter-particles" id="nl-particles"></div>
+    <div class="newsletter-inner">
+      <div class="newsletter-eyebrow reveal">Fresh from the orchard</div>
+      <h2 class="newsletter-h2 reveal">Stay in the <em>loop.</em></h2>
+      <p class="newsletter-p reveal">Be the first to hear about new releases, limited editions, harvest events, and
+        orchard happenings. No spam. Just craft beer news.</p>
+      <div class="newsletter-form reveal">
+        <input type="email" class="newsletter-input" placeholder="your@email.com">
+        <button class="newsletter-btn">Subscribe</button>
+      </div>
+      <div class="newsletter-note reveal">Join 4,200+ craft beer lovers. Unsubscribe anytime.</div>
+    </div>
+  </section>
+
+  <!-- ── FINAL CTA ── -->
+  <section id="cta-final">
+    <div class="cta-bg-text">ORCHARD</div>
+    <div class="cta-shape cta-shape-1"></div>
+    <div class="cta-shape cta-shape-2"></div>
+    <div class="cta-eyebrow reveal">Ready to taste it?</div>
+    <h2 class="cta-title reveal">Crack one<br><em>open.</em></h2>
+    <p class="cta-sub reveal">Order a mixed case and discover your new favourite. Free delivery on orders over ₹2,000.
+      Ships across India.</p>
+    <a href="#" class="btn-cta-crimson reveal">Order Now →</a>
+    <p class="cta-note reveal">Drink responsibly · Must be 18+ · Ships across India</p>
+    <div class="cta-awards reveal">
+      <div class="award-badge">
+        <div class="award-emoji">🥇</div>
+        <div class="award-text">Best Craft Beer</div>
+        <div class="award-year">India Beer Cup 2024</div>
+      </div>
+      <div class="award-badge">
+        <div class="award-emoji">🏆</div>
+        <div class="award-text">Top Brewer</div>
+        <div class="award-year">India Beer Cup 2023</div>
+      </div>
+      <div class="award-badge">
+        <div class="award-emoji">⭐</div>
+        <div class="award-text">Artisan Award</div>
+        <div class="award-year">Craft India 2022</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-wrap">
+          <img src="img/logo2.png"
+            alt="Himalayan Happy Orchard"
+            class="footer-logo-img">
+        </div>
+        <p class="footer-tagline">Small-batch craft fruit beers brewed from our orchard to your glass. No shortcuts. No
+          compromises. Every sip tells a story.</p>
+        <div class="footer-social">
+          <a href="#" class="soc">𝕏</a>
+          <a href="#" class="soc">in</a>
+          <a href="#" class="soc">ig</a>
+          <a href="#" class="soc">yt</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">All Ciders & Beers</a></li>
+          <li><a href="#">Gift Packs</a></li>
+          <li><a href="#">Mixed Cases</a></li>
+          <li><a href="#">Merchandise</a></li>
+          <li><a href="#">Wholesale</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="#visit-orchard">Taproom</a></li>
+          <li><a href="#visit-orchard">Orchard Tours</a></li>
+          <li><a href="#visit-orchard">Brewing Workshops</a></li>
+          <li><a href="#visit-orchard">Private Events</a></li>
+          <li><a href="#location">Directions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about-intro">Our Story</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Stockists</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Happy Orchard Brewing Co. All rights reserved.</span>
+      <span>Drink responsibly. 18+ only. <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    // ── GSAP Setup ──
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── Custom Cursor (desktop only) ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      (function animCursor() {
+        rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+        cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(animCursor);
+      })();
+      document.querySelectorAll('a, button, .why-card, .cider-card, .visit-feature-card, .visit-small-card').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; ring.style.width = '55px'; ring.style.height = '55px'; });
+        el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; });
+      });
+    }
+
+    // ── Mobile Nav ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobClose = document.getElementById('mob-close');
+    hamburger.addEventListener('click', () => { mobileNav.classList.add('open'); document.body.style.overflow = 'hidden'; });
+    mobClose.addEventListener('click', closeMobileNav);
+    function closeMobileNav() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
+
+    // ── Nav scroll ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('solid', window.scrollY > 60);
+    });
+
+    // ── Hero particles ──
+    const particleContainer = document.getElementById('hero-particles');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 5 + 2;
+      p.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random() * 100}%;
+    top:${40 + Math.random() * 55}%;
+    --dur:${3 + Math.random() * 4}s;
+    --delay:${Math.random() * 5}s;
+    background: ${Math.random() > 0.5 ? 'var(--gold)' : 'var(--crimson)'};
+  `;
+      particleContainer.appendChild(p);
+    }
+
+    // ── Newsletter particles ──
+    const nlContainer = document.getElementById('nl-particles');
+    for (let i = 0; i < 12; i++) {
+      const p = document.createElement('div');
+      p.className = 'nl-particle';
+      const size = Math.random() * 30 + 10;
+      p.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random() * 100}%;
+    top:${Math.random() * 100}%;
+    --nlDur:${4 + Math.random() * 5}s;
+    --nlDelay:${Math.random() * 4}s;
+  `;
+      nlContainer.appendChild(p);
+    }
+
+    // ── Hero entrance ──
+    const heroTl = gsap.timeline({ delay: 0.2 });
+    heroTl
+      .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', from: { y: 20 } })
+      .fromTo('#hero-h1', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
+      .fromTo('#hero-sub', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .fromTo('#hero-actions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5')
+      .fromTo('#hero-product', { opacity: 0, scale: 0.85, x: 60 }, { opacity: 1, scale: 1, x: 0, duration: 1.2, ease: 'power3.out' }, '-=0.8')
+      .fromTo('#hero-scroll', { opacity: 0 }, { opacity: 1, duration: 0.6 }, '-=0.2');
+
+    // Hero float
+    gsap.to('#hero-product', { y: -22, duration: 3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    // Story bottle float
+    gsap.to('#story-bottle-wrap', { y: -15, duration: 3.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    // About card main float
+    gsap.to('.about-card-main', { y: -10, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
+    // Hero parallax
+    gsap.to('#hero-h1', { scrollTrigger: { trigger: '#hero', scrub: true }, y: -80, opacity: 0.3 });
+    gsap.to('#hero-product', { scrollTrigger: { trigger: '#hero', scrub: 1 }, y: 100, scale: 0.9 });
+
+    // ── STICKY STORY ──
+    const storySteps = document.querySelectorAll('.story-step');
+    const progressDots = document.querySelectorAll('.progress-dot');
+    const storyBg = document.getElementById('story-bg');
+    const storyBottle = document.getElementById('story-bottle');
+    const labelTl = document.getElementById('label-tl');
+    const labelBr = document.getElementById('label-br');
+
+    const stepColors = [
+      { bg: 'linear-gradient(135deg, #1a0505, #0d0101)', bottle: 'linear-gradient(160deg, #880203, #1a0101)', tl: 'Origin', tlv: 'Western Ghats', br: 'ABV', brv: '4.8%' },
+      { bg: 'linear-gradient(135deg, #1a0a00, #3a1a00)', bottle: 'linear-gradient(160deg, #c0392b, #5a0000)', tl: 'Orchard', tlv: '12 Acres', br: 'Varieties', brv: '40+' },
+      { bg: 'linear-gradient(135deg, #0d1520, #1a2535)', bottle: 'linear-gradient(160deg, #2a4a6e, #0d2040)', tl: 'Process', tlv: '21-Day Brew', br: 'Batch', brv: 'Hand-crafted' },
+      { bg: 'linear-gradient(135deg, #1a1000, #2a1800)', bottle: 'linear-gradient(160deg, #c9973b, #5a3a00)', tl: 'Awards', tlv: '3× Winner', br: 'Launched', brv: 'Est. 2018' }
+    ];
+
+    function activateStep(i) {
+      storySteps.forEach((s, idx) => s.classList.toggle('active', idx === i));
+      progressDots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+      const c = stepColors[i];
+      storyBg.style.background = c.bg;
+      storyBottle.style.background = c.bottle;
+      gsap.fromTo(storyBottle, { rotateY: -8 }, { rotateY: 0, duration: 0.6, ease: 'power2.out' });
+      labelTl.querySelector('span').textContent = c.tl;
+      labelTl.querySelector('strong').textContent = c.tlv;
+      labelBr.querySelector('span').textContent = c.br;
+      labelBr.querySelector('strong').textContent = c.brv;
+    }
+
+    ScrollTrigger.create({
+      trigger: '#story',
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: self => { activateStep(Math.min(3, Math.floor(self.progress * 4))); }
+    });
+
+    // Flavours section removed
+
+    // ── WHY CARDS count-up ──
+    const whyCards = document.querySelectorAll('.why-card');
+    const statsData = ['100', '3', '21', '0'];
+    const whyObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const card = entry.target;
+          card.classList.add('visible');
+          const idx = Array.from(whyCards).indexOf(card);
+          const el = card.querySelector('.why-stat');
+          const target = parseInt(statsData[idx]);
+          let count = 0;
+          const step = Math.ceil(target / (1400 / 16)) || 1;
+          const suffix = el.querySelector('span') ? el.querySelector('span').outerHTML : '';
+          const timer = setInterval(() => {
+            count = Math.min(count + step, target);
+            el.innerHTML = count + suffix;
+            if (count >= target) clearInterval(timer);
+          }, 16);
+          whyObs.unobserve(card);
+        }
+      });
+    }, { threshold: 0.4 });
+    whyCards.forEach(c => whyObs.observe(c));
+
+    // ── GSAP video parallax ──
+    gsap.to('.video-orb', { scrollTrigger: { trigger: '#video-section', scrub: 2 }, y: -50, stagger: 0.3 });
+    gsap.to('.video-frame-ring', { scrollTrigger: { trigger: '#video-section', scrub: 1 }, y: 30, stagger: 0.2 });
+
+    // ── Generic reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => revealObs.observe(el));
+
+    // ── CTA entrance ──
+    gsap.fromTo('.cta-title', { scale: 0.85, opacity: 0 }, {
+      scale: 1, opacity: 1, duration: 1.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#cta-final', start: 'top 70%' }
+    });
+    gsap.to('.cta-bg-text', { scrollTrigger: { trigger: '#cta-final', scrub: 1.5 }, x: -80 });
+    gsap.to('.newsletter-bg', { scrollTrigger: { trigger: '#newsletter', scrub: 1.5 }, x: 80 });
+
+    // ── About bg text parallax ──
+    gsap.to('.about-bg-text', { scrollTrigger: { trigger: '#about-intro', scrub: 1.2 }, x: -60 });
+
+    // ── Stagger cider cards ──
+    gsap.fromTo('.cider-card', { y: 50, opacity: 0 }, {
+      y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#our-ciders', start: 'top 70%' }
+    });
+
+    // ── Visit cards ──
+    gsap.fromTo('.visit-small-card', { y: 40, opacity: 0 }, {
+      y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '.visit-small-grid', start: 'top 80%' }
+    });
+
+    // ── Award badges pop ──
+    gsap.fromTo('.award-badge', { scale: 0.8, opacity: 0 }, {
+      scale: 1, opacity: 1, duration: 0.6, stagger: 0.12, ease: 'back.out(1.7)',
+      scrollTrigger: { trigger: '.cta-awards', start: 'top 85%' }
+    });
+  </script>
+</body>
+
+</html>
