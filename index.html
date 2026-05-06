@@ -2409,6 +2409,7 @@
 
     .reveal.in {
       opacity: 1;
+      padding:15px;
       transform: translateY(0);
     }
 
@@ -2999,7 +3000,6 @@
         <h2 class="about-h2">From Still Mountains<br>to a <em>Scalable Vision</em></h2>
         <p class="about-p">Happy Orchard started with a simple idea — build something meaningful, not just big.</p>
         <p class="about-p">In the mountains, life is slower, clearer, and more connected to nature. That same philosophy defines how we create — with intention, balance, and respect for the environment.</p>
-        <p class="about-p">But building a brand here is not romantic. It demands clarity. Logistics are tougher. Supply chains are slower. Scaling is harder. Which is why every step — from product selection to distribution — is built with strategy.</p>
         <p class="about-p">Today, we are present in two states. Tomorrow, we scale across India. And beyond that, globally. Because this isn't just a brand goal — it's a lifetime commitment.</p>
         <!-- <div class="about-stats">
           <div class="about-stat">
@@ -3212,7 +3212,7 @@
       class="vp vp-5"></div>
 
     <div class="video-deco deco-1">Farm to Pint</div>
-    <div class="video-deco deco-2">Brewed Weekly</div>
+    <!-- <div class="video-deco deco-2">Brewed Weekly</div> -->
     <div class="video-deco deco-3">Western Ghats</div>
     <div class="video-deco deco-4">Wild Yeast</div>
 
@@ -3525,7 +3525,7 @@
     gsap.to('.about-card-main', { y: -10, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
     // Hero parallax
-    gsap.to('#hero-h1', { scrollTrigger: { trigger: '#hero', scrub: true }, y: -80, opacity: 0.3 });
+    //gsap.to('#hero-h1', { scrollTrigger: { trigger: '#hero', scrub: true }, y: -80, opacity: 0.3 });
     gsap.to('#hero-product', { scrollTrigger: { trigger: '#hero', scrub: 1 }, y: 100, scale: 0.9 });
 
     // Flavours section removed
