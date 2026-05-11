@@ -2882,6 +2882,228 @@
     .about-parallax-layer-mid  { will-change: transform; }
     .about-parallax-layer-fore { will-change: transform; }
 
+    /* ═══════════════════════════════════════════════
+   MOBILE-FIRST IMPROVEMENTS (≤ 480px)
+═══════════════════════════════════════════════ */
+    @media (max-width: 480px) {
+
+      /* ── Base ── */
+      html { font-size: 15px; }
+
+      /* ── Nav ── */
+      #nav { padding: 0.9rem 1rem; }
+      #nav.solid { padding: 0.7rem 1rem; }
+      .nav-logo-img { height: 56px; }
+
+      /* ── Hero ── */
+      #hero {
+        padding: 5.5rem 1.1rem 3rem;
+        min-height: 100svh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .hero-h1 {
+        font-size: clamp(2.6rem, 13vw, 3.6rem);
+        padding: 0;
+        max-width: 100%;
+        text-align: center;
+      }
+      .hero-sub {
+        font-size: 0.92rem;
+        margin: 1.25rem 0 1.75rem;
+        max-width: 100%;
+        text-align: center;
+      }
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .btn-cta, .btn-ghost {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 0.95rem 1.5rem;
+      }
+      .hero-eyebrow { margin-bottom: 1rem; justify-content: center; }
+
+      /* Show the hero product image on mobile — inline in flow */
+      .hero-product {
+        display: flex !important;
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        width: min(260px, 68vw);
+        margin: 1.75rem auto 0;
+        opacity: 1;
+      }
+      .hero-product-visual {
+        aspect-ratio: 1 / 1.3;
+      }
+      /* Hide floating badges — they overflow at this size */
+      .hero-badge { display: none; }
+      .hero-scroll-hint { display: none; }
+
+      /* ── Marquee ── */
+      .marquee-item { padding: 0 1.25rem; font-size: 0.68rem; }
+
+      /* ── About ── */
+      #about-intro { padding: 4rem 1.1rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-h2 { font-size: clamp(2.2rem, 10vw, 3rem); }
+      .about-p { font-size: 0.93rem; max-width: 100%; }
+      .about-stats { gap: 1.25rem; }
+      .about-stat-num { font-size: 2.4rem; }
+      .about-right { padding: 0 0.5rem; }
+      .about-card-float, .about-card-float2 { display: none; }
+      .about-img-frame { padding: 1rem; }
+      .about-product-img { width: 72%; }
+
+      /* ── Ciders ── */
+      #our-ciders { padding: 4rem 1.1rem; }
+      .ciders-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .cider-card { padding: 2rem 1.5rem; }
+
+      /* ── Why ── */
+      #why { padding: 4rem 1.1rem; }
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .why-card { padding: 1.5rem 1.25rem; }
+      .why-stat { font-size: 2.2rem; }
+
+      /* ── Video section ── */
+      #video-section { height: 70vh; }
+      .video-content { padding: 0 1.1rem; }
+      .video-content h2 { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+      .video-content p { font-size: 0.88rem; }
+      .video-btn-group { flex-direction: column; align-items: center; }
+      .video-btn-group .btn-cta,
+      .video-btn-group .btn-ghost { width: 100%; max-width: 300px; }
+      .deco-1, .deco-2, .deco-3, .deco-4 { display: none; }
+
+      /* ── Visit orchard ── */
+      #visit-orchard { padding: 4rem 1.1rem; }
+      .visit-grid { grid-template-columns: 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+      .visit-feature-card { aspect-ratio: 3/2; }
+      .visit-card-body { padding: 1.25rem; }
+      .visit-card-title { font-size: 1.3rem; }
+      .visit-small-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .visit-small-card { padding: 1.5rem 1rem; }
+      .visit-small-title { font-size: 0.95rem; }
+      .visit-small-desc { font-size: 0.75rem; }
+
+      /* ── Location ── */
+      #location { padding: 4rem 1.1rem; }
+      .location-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .location-map { aspect-ratio: 4/3; }
+      .location-cta-btns { flex-direction: column; }
+      .btn-outline-gold { width: 100%; justify-content: center; }
+      .map-label { white-space: normal; text-align: center; width: calc(100% - 3rem); }
+
+      /* ── Newsletter ── */
+      #newsletter { padding: 4rem 1.1rem; }
+      .newsletter-form { flex-direction: column; gap: 0.75rem; }
+      .newsletter-input { width: 100%; }
+      .newsletter-btn { width: 100%; }
+      .newsletter-title { font-size: clamp(2rem, 9vw, 3rem); }
+
+      /* ── CTA final ── */
+      #cta-final { padding: 4rem 1.1rem; }
+      .cta-title { font-size: clamp(2.4rem, 11vw, 4rem); }
+      .cta-sub { font-size: 0.93rem; max-width: 100%; }
+      .btn-cta-crimson { width: 100%; padding: 1.1rem 2rem; }
+      .cta-awards { gap: 0.75rem; margin-top: 2.5rem; }
+      .award-badge { padding: 0.75rem 1rem; }
+
+      /* ── Footer ── */
+      footer { padding: 3rem 1.1rem 1.25rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-logo-img { height: 70px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 0.5rem; font-size: 0.65rem; }
+
+      /* ── Mobile nav overlay ── */
+      #mobile-nav a { font-size: 1.8rem; }
+
+      /* ── Section eyebrows ── */
+      .sec-eyebrow { font-size: 0.62rem; }
+      .sec-title { font-size: clamp(2rem, 9vw, 3rem); }
+    }
+
+    /* ── Tablet tweaks (481px – 768px) ── */
+    @media (min-width: 481px) and (max-width: 768px) {
+      #hero { padding: 5rem 1.5rem 3rem; flex-direction: column; align-items: center; text-align: center; }
+      .hero-h1 { font-size: clamp(3rem, 11vw, 4.2rem); padding: 0; text-align: center; }
+      .hero-sub { max-width: 100%; text-align: center; }
+      .hero-actions { flex-direction: column; width: 100%; align-items: center; }
+      .btn-cta, .btn-ghost { width: 100%; text-align: center; justify-content: center; }
+      /* Show hero product image inline on tablet */
+      .hero-product {
+        display: flex !important;
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        width: min(300px, 60vw);
+        margin: 2rem auto 0;
+        opacity: 1;
+      }
+      .hero-badge { display: none; }
+
+      #about-intro,
+      #our-ciders,
+      #visit-orchard,
+      #location,
+      #newsletter,
+      #cta-final { padding: 5rem 2rem; }
+      #why { padding: 5rem 2rem; }
+      footer { padding: 3rem 2rem 1.5rem; }
+
+      .ciders-grid { grid-template-columns: 1fr; }
+      .visit-small-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-btn { width: 100%; }
+      .location-cta-btns { flex-direction: column; }
+      .btn-outline-gold { justify-content: center; }
+    }
+
+    /* ── Touch-target safety — all tappable elements ── */
+    @media (pointer: coarse) {
+      a, button, .soc, .play-ring, .visit-card-link {
+        min-height: 44px;
+        min-width: 44px;
+      }
+      .btn-cta, .btn-ghost, .btn-cta-crimson, .btn-outline-gold,
+      .newsletter-btn, .nav-order {
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Remove hover transforms on touch — prevent stuck states */
+      .cider-card:hover,
+      .visit-feature-card:hover,
+      .visit-small-card:hover,
+      .why-card:hover,
+      .award-badge:hover {
+        transform: none;
+      }
+    }
+
+    /* ── Respect reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .about-product-img { animation: none; }
+    }
+
   </style>
 </head>
 
@@ -3398,7 +3620,7 @@
 
   <!-- ── FOOTER ── -->
   <footer>
-    <div class="footer-top" style="grid-template-columns: 1.6fr 1fr 1fr;">
+    <div class="footer-top">
       <div>
         <div class="footer-brand-wrap">
           <img src="img/logo2.png"
