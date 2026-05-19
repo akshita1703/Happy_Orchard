@@ -305,60 +305,10 @@
       background: var(--dark);
     }
 
-    /* ── Hero Video Background ── */
-    .hero-video-bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .hero-video-bg video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    /* Dark overlay so text stays readable over video */
-    .hero-video-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(20, 1, 1, 0.72) 0%,
-        rgba(20, 1, 1, 0.45) 50%,
-        rgba(20, 1, 1, 0.55) 100%
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* Lift all direct hero children above video layer */
-    #hero > *:not(.hero-video-bg):not(.hero-video-overlay) {
-      z-index: 2;
-    }
-
-    /* Restore position:absolute for elements that need it */
-    #hero > .hero-bg,
-    #hero > .hero-grain,
-    #hero > .hero-particles,
-    #hero > .hero-product,
-    #hero > .hero-scroll-hint {
-      position: absolute;
-    }
-
     .hero-bg {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      z-index: 2;
       background:
         radial-gradient(ellipse 80% 70% at 70% 40%, rgba(136, 2, 3, 0.28) 0%, transparent 65%),
         radial-gradient(ellipse 40% 60% at 10% 90%, rgba(201, 151, 59, 0.12) 0%, transparent 60%),
@@ -3503,23 +3453,6 @@
 
   <!-- ── HERO ── -->
   <section id="hero">
-
-    <!-- VIDEO BACKGROUND — replace src with your actual video file or URL -->
-    <div class="hero-video-bg">
-      <video
-        id="hero-bg-video"
-        src="vid/hf_20260428_193507_4286c423-2fd9-4efd-92bd-91a939453fc1.mp4"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-        poster="YOUR_FALLBACK_IMAGE_HERE.jpg"
-      ></video>
-    </div>
-    <!-- Dark overlay keeps text readable over the video -->
-    <div class="hero-video-overlay"></div>
-
     <div class="hero-bg"></div>
     <div class="hero-grain"></div>
 
@@ -3530,8 +3463,8 @@
 
    <h1 class="hero-h1" id="hero-h1">
       <!-- <span class="outline">Born in the</span><br> -->
-      <span class="accent">Crafted in the  </span><br>
-     Mountains.<br>
+      <span class="accent">Crafted in  </span><br>
+      the Mountains.<br>
       <!-- <span  class="outline" >Built for the World.</span> -->
     </h1>
 
@@ -4181,7 +4114,7 @@
     top:${40 + Math.random() * 55}%;
     --dur:${3 + Math.random() * 4}s;
     --delay:${Math.random() * 5}s;
-    background: ${Math.random() > 0.5 ? 'rgba(210,210,210,0.55)' : 'rgba(190,190,190,0.4)'};
+    background: ${Math.random() > 0.5 ? 'var(--gold)' : 'var(--crimson)'};
   `;
       particleContainer.appendChild(p);
     }
